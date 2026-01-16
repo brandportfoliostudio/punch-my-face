@@ -2,29 +2,31 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Punch Amey 😡</title>
+<title>Real Punching Game 🥊</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
     margin: 0;
     height: 100vh;
-    background: radial-gradient(circle, #ff758c, #ff7eb3);
+    background: linear-gradient(135deg, #1f1c2c, #928dab);
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: 'Poppins', sans-serif;
+    color: white;
     overflow: hidden;
 }
 
 .game {
     text-align: center;
+    width: 100%;
 }
 
-.face-box {
+.arena {
     position: relative;
-    width: 220px;
-    height: 220px;
+    width: 260px;
+    height: 260px;
     margin: auto;
 }
 
@@ -34,90 +36,107 @@ body {
     border-radius: 50%;
     object-fit: cover;
     border: 6px solid #fff;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    transition: transform 0.08s;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
 
-.shake {
-    animation: shake 0.35s;
+.hit {
+    animation: hit 0.15s;
 }
 
-@keyframes shake {
-    0% { transform: translate(0); }
-    20% { transform: translate(-10px, 5px) rotate(-3deg); }
-    40% { transform: translate(10px, -5px) rotate(3deg); }
-    60% { transform: translate(-6px, 3px); }
-    80% { transform: translate(6px, -3px); }
-    100% { transform: translate(0); }
+@keyframes hit {
+    0% { transform: scale(1) translate(0); }
+    50% { transform: scale(0.96) translate(-6px, 4px); }
+    100% { transform: scale(1) translate(0); }
 }
 
 .fist {
     position: absolute;
-    font-size: 80px;
-    top: 60px;
+    font-size: 90px;
     opacity: 0;
 }
 
 .left {
-    left: -120px;
+    left: -140px;
+    top: 80px;
 }
 
 .right {
-    right: -120px;
+    right: -140px;
+    top: 80px;
 }
 
 .punch-left {
-    animation: punchLeft 0.35s forwards;
+    animation: punchLeft 0.18s forwards;
 }
 
 .punch-right {
-    animation: punchRight 0.35s forwards;
+    animation: punchRight 0.18s forwards;
 }
 
 @keyframes punchLeft {
-    0% { left: -120px; opacity: 1; }
-    50% { left: 20px; }
-    100% { left: -120px; opacity: 0; }
+    0% { left: -140px; opacity: 1; }
+    60% { left: 10px; }
+    100% { left: -140px; opacity: 0; }
 }
 
 @keyframes punchRight {
-    0% { right: -120px; opacity: 1; }
-    50% { right: 20px; }
-    100% { right: -120px; opacity: 0; }
+    0% { right: -140px; opacity: 1; }
+    60% { right: 10px; }
+    100% { right: -140px; opacity: 0; }
 }
 
-button {
-    margin-top: 30px;
-    padding: 14px 35px;
-    font-size: 20px;
-    border: none;
-    border-radius: 40px;
+.health-bar {
+    width: 240px;
+    height: 16px;
+    background: #333;
+    border-radius: 10px;
+    margin: 15px auto;
+    overflow: hidden;
+}
+
+.health {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #00ff99, #00cc66);
+    transition: width 0.2s;
+}
+
+.power {
+    width: 240px;
+    height: 10px;
+    background: #222;
+    border-radius: 10px;
+    margin: 10px auto;
+    overflow: hidden;
+}
+
+.power-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ffcc00, #ff3300);
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    width: 260px;
+    margin: 20px auto 0;
+}
+
+.control {
+    width: 120px;
+    height: 60px;
     background: #ff2e63;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-}
-
-button:active {
-    transform: scale(0.95);
-}
-
-.counter {
-    margin-top: 15px;
-    font-size: 20px;
-    font-weight: 600;
-}
-
-.emoji-hit {
-    position: absolute;
-    font-size: 30px;
-    top: 20px;
-    animation: pop 0.7s forwards;
-}
-
-@keyframes pop {
-    0% { transform: scale(0); opacity: 1; }
-    50% { transform: scale(1.5); }
-    100% { transform: scale(0); opacity: 0; top: -30px; }
+    border-radius: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    user-select: none;
 }
 </style>
 </head>
@@ -125,43 +144,72 @@ button:active {
 <body>
 
 <div class="game">
-    <h2>Anger Release Mode 😤</h2>
+    <h2>Real Punching Mode 🥊</h2>
 
-    <div class="face-box" id="box">
+    <div class="health-bar">
+        <div class="health" id="health"></div>
+    </div>
+
+    <div class="arena" id="arena">
         <img src="your-photo.jpg" class="face" id="face">
-
         <div class="fist left" id="leftFist">👊</div>
         <div class="fist right" id="rightFist">👊</div>
     </div>
 
-    <button onclick="punch()">PUNCH 👊</button>
+    <div class="power">
+        <div class="power-fill" id="powerFill"></div>
+    </div>
 
-    <div class="counter">Punches: <span id="count">0</span></div>
+    <div class="controls">
+        <div class="control" id="leftBtn">LEFT 👊</div>
+        <div class="control" id="rightBtn">RIGHT 👊</div>
+    </div>
 </div>
 
 <script>
-let count = 0;
-let leftTurn = true;
+let health = 100;
+let charging = false;
+let power = 0;
+let side = "left";
+let chargeInterval;
 
-function punch() {
-    const face = document.getElementById("face");
-    const leftFist = document.getElementById("leftFist");
-    const rightFist = document.getElementById("rightFist");
+const face = document.getElementById("face");
+const leftFist = document.getElementById("leftFist");
+const rightFist = document.getElementById("rightFist");
+const healthBar = document.getElementById("health");
+const powerFill = document.getElementById("powerFill");
 
-    count++;
-    document.getElementById("count").innerText = count;
+function startCharge(s) {
+    charging = true;
+    side = s;
+    power = 0;
 
-    // Face shake
-    face.classList.remove("shake");
+    chargeInterval = setInterval(() => {
+        if (power < 100) {
+            power += 2;
+            powerFill.style.width = power + "%";
+        }
+    }, 16);
+}
+
+function releasePunch() {
+    if (!charging) return;
+    charging = false;
+    clearInterval(chargeInterval);
+
+    const damage = Math.floor(power / 5);
+    health = Math.max(0, health - damage);
+    healthBar.style.width = health + "%";
+
+    face.classList.remove("hit");
     void face.offsetWidth;
-    face.classList.add("shake");
+    face.classList.add("hit");
 
-    // Mobile vibration
     if (navigator.vibrate) {
-        navigator.vibrate([60, 40, 60]);
+        navigator.vibrate(power);
     }
 
-    if (leftTurn) {
+    if (side === "left") {
         leftFist.classList.remove("punch-left");
         void leftFist.offsetWidth;
         leftFist.classList.add("punch-left");
@@ -171,19 +219,17 @@ function punch() {
         rightFist.classList.add("punch-right");
     }
 
-    leftTurn = !leftTurn;
-    spawnHit();
+    powerFill.style.width = "0%";
 }
 
-function spawnHit() {
-    const hit = document.createElement("div");
-    hit.className = "emoji-hit";
-    hit.innerText = "💥";
-    hit.style.left = Math.random() * 180 + "px";
-    document.getElementById("box").appendChild(hit);
+["mousedown","touchstart"].forEach(e=>{
+    leftBtn.addEventListener(e, ()=>startCharge("left"));
+    rightBtn.addEventListener(e, ()=>startCharge("right"));
+});
 
-    setTimeout(() => hit.remove(), 700);
-}
+["mouseup","touchend"].forEach(e=>{
+    document.addEventListener(e, releasePunch);
+});
 </script>
 
 </body>
