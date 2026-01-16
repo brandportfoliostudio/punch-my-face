@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Punch Amey 😤</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: radial-gradient(circle at top, #ffdde1, #ee9ca7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Poppins', sans-serif;
+        overflow: hidden;
+    }
+
+    .game {
+        text-align: center;
+    }
+
+    .face-box {
+        position: relative;
+        width: 220px;
+        height: 220px;
+        margin: auto;
+    }
+
+    .face {
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 6px solid #fff;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        transition: transform 0.1s;
+    }
+
+    .shake {
+        animation: shake 0.4s;
+    }
+
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-12px) rotate(-4deg); }
+        50% { transform: translateX(12px) rotate(4deg); }
+        75% { transform: translateX(-8px); }
+        100% { transform: translateX(0); }
+    }
+
+    .fist {
+        position: absolute;
+        width: 120px;
+        right: -140px;
+        top: 40px;
+        opacity: 0;
+        transform: rotate(-20deg);
+    }
+
+    .punch {
+        animation: punch 0.4s forwards;
+    }
+
+    @keyframes punch {
+        0% { right: -140px; opacity: 1; }
+        50% { right: -10px; }
+        100% { right: -140px; opacity: 0; }
+    }
+
+    button {
+        margin-top: 30px;
+        padding: 14px 30px;
+        font-size: 18px;
+        border: none;
+        border-radius: 30px;
+        background: #ff4d6d;
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        transition: transform 0.1s;
+    }
+
+    button:active {
+        transform: scale(0.95);
+    }
+
+    .counter {
+        margin-top: 15px;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .emoji {
+        position: absolute;
+        font-size: 30px;
+        animation: pop 0.8s forwards;
+    }
+
+    @keyframes pop {
+        0% { transform: scale(0); opacity: 1; }
+        50% { transform: scale(1.5); }
+        100% { transform: scale(0); opacity: 0; top: -40px; }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="game">
+    <h2>Anger Release Mode 😡</h2>
+
+    <div class="face-box">
+        <img src="your-photo.jpg" class="face" id="face">
+        <img src="https://i.imgur.com/6XbQ7zR.png" class="fist" id="fist">
+    </div>
+
+    <button onclick="punch()">PUNCH 😤</button>
+
+    <div class="counter">Punches: <span id="count">0</span></div>
+</div>
+
+<script>
+    let count = 0;
+
+    function punch() {
+        const face = document.getElementById("face");
+        const fist = document.getElementById("fist");
+
+        count++;
+        document.getElementById("count").innerText = count;
+
+        face.classList.remove("shake");
+        void face.offsetWidth;
+        face.classList.add("shake");
+
+        fist.classList.remove("punch");
+        void fist.offsetWidth;
+        fist.classList.add("punch");
+
+        spawnEmoji();
+    }
+
+    function spawnEmoji() {
+        const emoji = document.createElement("div");
+        emoji.className = "emoji";
+        emoji.innerText = "💢";
+        emoji.style.left = Math.random() * 200 + "px";
+        emoji.style.top = "120px";
+
+        document.querySelector(".face-box").appendChild(emoji);
+
+        setTimeout(() => emoji.remove(), 800);
+    }
+</script>
+
+</body>
+</html>
