@@ -2,110 +2,192 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Punch Amey 😤</title>
+<title>Punch Amey 😡</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-    body {
-        margin: 0;
-        height: 100vh;
-        background: radial-gradient(circle at top, #ffdde1, #ee9ca7);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: 'Poppins', sans-serif;
-        overflow: hidden;
-    }
+body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle, #ff758c, #ff7eb3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+}
 
-    .game {
-        text-align: center;
-    }
+.game {
+    text-align: center;
+}
 
-    .face-box {
-        position: relative;
-        width: 220px;
-        height: 220px;
-        margin: auto;
-    }
+.face-box {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    margin: auto;
+}
 
-    .face {
-        width: 220px;
-        height: 220px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 6px solid #fff;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-        transition: transform 0.1s;
-    }
+.face {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 6px solid #fff;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
 
-    .shake {
-        animation: shake 0.4s;
-    }
+.shake {
+    animation: shake 0.35s;
+}
 
-    @keyframes shake {
-        0% { transform: translateX(0); }
-        25% { transform: translateX(-12px) rotate(-4deg); }
-        50% { transform: translateX(12px) rotate(4deg); }
-        75% { transform: translateX(-8px); }
-        100% { transform: translateX(0); }
-    }
+@keyframes shake {
+    0% { transform: translate(0); }
+    20% { transform: translate(-10px, 5px) rotate(-3deg); }
+    40% { transform: translate(10px, -5px) rotate(3deg); }
+    60% { transform: translate(-6px, 3px); }
+    80% { transform: translate(6px, -3px); }
+    100% { transform: translate(0); }
+}
 
-    .fist {
-        position: absolute;
-        width: 120px;
-        right: -140px;
-        top: 40px;
-        opacity: 0;
-        transform: rotate(-20deg);
-    }
+.fist {
+    position: absolute;
+    font-size: 80px;
+    top: 60px;
+    opacity: 0;
+}
 
-    .punch {
-        animation: punch 0.4s forwards;
-    }
+.left {
+    left: -120px;
+}
 
-    @keyframes punch {
-        0% { right: -140px; opacity: 1; }
-        50% { right: -10px; }
-        100% { right: -140px; opacity: 0; }
-    }
+.right {
+    right: -120px;
+}
 
-    button {
-        margin-top: 30px;
-        padding: 14px 30px;
-        font-size: 18px;
-        border: none;
-        border-radius: 30px;
-        background: #ff4d6d;
-        color: white;
-        cursor: pointer;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        transition: transform 0.1s;
-    }
+.punch-left {
+    animation: punchLeft 0.35s forwards;
+}
 
-    button:active {
-        transform: scale(0.95);
-    }
+.punch-right {
+    animation: punchRight 0.35s forwards;
+}
 
-    .counter {
-        margin-top: 15px;
-        font-size: 20px;
-        font-weight: 600;
-    }
+@keyframes punchLeft {
+    0% { left: -120px; opacity: 1; }
+    50% { left: 20px; }
+    100% { left: -120px; opacity: 0; }
+}
 
-    .emoji {
-        position: absolute;
-        font-size: 30px;
-        animation: pop 0.8s forwards;
-    }
+@keyframes punchRight {
+    0% { right: -120px; opacity: 1; }
+    50% { right: 20px; }
+    100% { right: -120px; opacity: 0; }
+}
 
-    @keyframes pop {
-        0% { transform: scale(0); opacity: 1; }
-        50% { transform: scale(1.5); }
-        100% { transform: scale(0); opacity: 0; top: -40px; }
-    }
+button {
+    margin-top: 30px;
+    padding: 14px 35px;
+    font-size: 20px;
+    border: none;
+    border-radius: 40px;
+    background: #ff2e63;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+.counter {
+    margin-top: 15px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.emoji-hit {
+    position: absolute;
+    font-size: 30px;
+    top: 20px;
+    animation: pop 0.7s forwards;
+}
+
+@keyframes pop {
+    0% { transform: scale(0); opacity: 1; }
+    50% { transform: scale(1.5); }
+    100% { transform: scale(0); opacity: 0; top: -30px; }
+}
 </style>
 </head>
 
+<body>
+
+<div class="game">
+    <h2>Anger Release Mode 😤</h2>
+
+    <div class="face-box" id="box">
+        <img src="your-photo.jpg" class="face" id="face">
+
+        <div class="fist left" id="leftFist">👊</div>
+        <div class="fist right" id="rightFist">👊</div>
+    </div>
+
+    <button onclick="punch()">PUNCH 👊</button>
+
+    <div class="counter">Punches: <span id="count">0</span></div>
+</div>
+
+<script>
+let count = 0;
+let leftTurn = true;
+
+function punch() {
+    const face = document.getElementById("face");
+    const leftFist = document.getElementById("leftFist");
+    const rightFist = document.getElementById("rightFist");
+
+    count++;
+    document.getElementById("count").innerText = count;
+
+    // Face shake
+    face.classList.remove("shake");
+    void face.offsetWidth;
+    face.classList.add("shake");
+
+    // Mobile vibration
+    if (navigator.vibrate) {
+        navigator.vibrate([60, 40, 60]);
+    }
+
+    if (leftTurn) {
+        leftFist.classList.remove("punch-left");
+        void leftFist.offsetWidth;
+        leftFist.classList.add("punch-left");
+    } else {
+        rightFist.classList.remove("punch-right");
+        void rightFist.offsetWidth;
+        rightFist.classList.add("punch-right");
+    }
+
+    leftTurn = !leftTurn;
+    spawnHit();
+}
+
+function spawnHit() {
+    const hit = document.createElement("div");
+    hit.className = "emoji-hit";
+    hit.innerText = "💥";
+    hit.style.left = Math.random() * 180 + "px";
+    document.getElementById("box").appendChild(hit);
+
+    setTimeout(() => hit.remove(), 700);
+}
+</script>
+
+</body>
+</html>
 <body>
 
 <div class="game">
