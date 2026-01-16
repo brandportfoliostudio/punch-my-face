@@ -138,6 +138,164 @@ body {
     font-size: 18px;
     user-select: none;
 }
+
+/* OUCH emoji */
+.ouch {
+    position: absolute;
+    font-size: 32px;
+    animation: ouchPop 0.9s forwards;
+    pointer-events: none;
+}
+
+@keyframes ouchPop {
+    0% { transform: scale(0); opacity: 1; }
+    40% { transform: scale(1.6); }
+    100% { transform: scale(0.6) translateY(-40px); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="game">
+    <h2>Real Punching Mode 🥊</h2>
+
+    <div class="health-bar">
+        <div class="health" id="health"></div>
+    </div>
+
+    <div class="arena" id="arena">
+        <img src="your-photo.jpg" class="face" id="face">
+        <div class="fist left" id="leftFist">👊</div>
+        <div class="fist right" id="rightFist">👊</div>
+    </div>
+
+    <div class="power">
+        <div class="power-fill" id="powerFill"></div>
+    </div>
+
+    <div class="controls">
+        <div class="control" id="leftBtn">LEFT 👊</div>
+        <div class="control" id="rightBtn">RIGHT 👊</div>
+    </div>
+</div>
+
+<script>
+let health = 100;
+let charging = false;
+let power = 0;
+let side = "left";
+let chargeInterval;
+
+const face = document.getElementById("face");
+const leftFist = document.getElementById("leftFist");
+const rightFist = document.getElementById("rightFist");
+const healthBar = document.getElementById("health");
+const powerFill = document.getElementById("powerFill");
+const arena = document.getElementById("arena");
+
+const ouchEmojis = ["😖","😫","😵","😣","OUCH"];
+
+function startCharge(s) {
+    charging = true;
+    side = s;
+    power = 0;
+
+    chargeInterval = setInterval(() => {
+        if (power < 100) {
+            power += 2;
+            powerFill.style.width = power + "%";
+        }
+    }, 16);
+}
+
+function releasePunch() {
+    if (!charging) return;
+    charging = false;
+    clearInterval(chargeInterval);
+
+    const damage = Math.floor(power / 5);
+    health = Math.max(0, health - damage);
+    healthBar.style.width = health + "%";
+
+    face.classList.remove("hit");
+    void face.offsetWidth;
+    face.classList.add("hit");
+
+    if (navigator.vibrate) {
+        navigator.vibrate(power);
+    }
+
+    if (side === "left") {
+        leftFist.classList.remove("punch-left");
+        void leftFist.offsetWidth;
+        leftFist.classList.add("punch-left");
+    } else {
+        rightFist.classList.remove("punch-right");
+        void rightFist.offsetWidth;
+        rightFist.classList.add("punch-right");
+    }
+
+    spawnOuch(damage);
+    powerFill.style.width = "0%";
+}
+
+function spawnOuch(dmg) {
+    const ouch = document.createElement("div");
+    ouch.className = "ouch";
+    ouch.innerText = ouchEmojis[Math.floor(Math.random() * ouchEmojis.length)];
+    ouch.style.left = 80 + Math.random() * 80 + "px";
+    ouch.style.top = "40px";
+    ouch.style.fontSize = (24 + dmg) + "px";
+
+    arena.appendChild(ouch);
+    setTimeout(() => ouch.remove(), 900);
+}
+
+["mousedown","touchstart"].forEach(e=>{
+    leftBtn.addEventListener(e, ()=>startCharge("left"));
+    rightBtn.addEventListener(e, ()=>startCharge("right"));
+});
+
+["mouseup","touchend"].forEach(e=>{
+    document.addEventListener(e, releasePunch);
+});
+</script>
+
+</body>
+</html>.power {
+    width: 240px;
+    height: 10px;
+    background: #222;
+    border-radius: 10px;
+    margin: 10px auto;
+    overflow: hidden;
+}
+
+.power-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ffcc00, #ff3300);
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    width: 260px;
+    margin: 20px auto 0;
+}
+
+.control {
+    width: 120px;
+    height: 60px;
+    background: #ff2e63;
+    border-radius: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    user-select: none;
+}
 </style>
 </head>
 
